@@ -35,8 +35,34 @@ app.use("/api", authRoutes);
 app.use(errorHandler);
 
 // --------------- Start Server ---------------
+const { prisma } = require("./config/database");
+const { DEFAULT_USER_ID } = require("./config/constants");
+
+// --------------- Start Server ---------------
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
-  console.log(`\n  🚀  API running at http://localhost:${PORT}\n`);
-});
+async function bootstrap() {
+  try {
+    // Ensure the default user exists to prevent foreign key constraint errors 
+    // when creating event types or booking meetings on a fresh database.
+    await prisma.user.upsert({
+      where: { id: DEFAULT_USER_ID },
+      update: {},
+      create: {
+        id: DEFAULT_USER_ID,
+        name: "Rahul Jain",
+        email: "owner@calendlyclone.dev",
+        timezone: "Asia/Kolkata",
+      },
+    });
+    console.log("  ✓ Default user verified");
+  } catch (error) {
+    console.error("  ❌ Failed to verify default user:", error.message);
+  }
+
+  app.listen(PORT, () => {
+    console.log(`\n  🚀  API running at http://localhost:${PORT}\n`);
+  });
+}
+
+bootstrap();
