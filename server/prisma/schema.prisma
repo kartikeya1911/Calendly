@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -20,8 +20,8 @@ model User {
   timezone        String             @default("Asia/Kolkata")
   googleId        String?            @unique
   googleEmail     String?            @unique
-  googleRefreshToken String?  @db.Text
-  googleAccessToken String?   @db.Text
+  googleRefreshToken String?
+  googleAccessToken String?
   googleAccessTokenExpiresAt DateTime?
   googleCalendarConnected Boolean @default(false)
   eventTypes      EventType[]
