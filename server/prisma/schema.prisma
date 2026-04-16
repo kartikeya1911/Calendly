@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int                @id @default(autoincrement())
+  name            String
+  email           String             @unique
+  timezone        String             @default("Asia/Kolkata")
+  googleId        String?            @unique
+  googleEmail     String?            @unique
+  googleRefreshToken String?  @db.Text
+  googleAccessToken String?   @db.Text
+  googleAccessTokenExpiresAt DateTime?
+  googleCalendarConnected Boolean @default(false)
+  eventTypes      EventType[]
+  availability    AvailabilityRule[]
+  meetings        Meeting[]          @relation("HostMeetings")
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
+model EventType {
+  id              Int                @id @default(autoincrement())
+  userId          Int
+  name            String
+  slug            String             @unique
+  durationMinutes Int
+  isActive        Boolean            @default(true)
+  user            User               @relation(fields: [userId], references: [id])
+  meetings        Meeting[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@index([userId])
+}
+
+model AvailabilityRule {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  dayOfWeek       Int
+  startTime       String
+  endTime         String
+  user            User      @relation(fields: [userId], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([userId, dayOfWeek])
+}
+
+model Meeting {
+  id              Int          @id @default(autoincrement())
+  eventTypeId     Int
+  hostId          Int
+  inviteeName     String
+  inviteeEmail    String
+  startsAt        DateTime
+  endsAt          DateTime
+  status          MeetingStatus @default(BOOKED)
+  googleCalendarEventId String? // ID of the created Google Calendar event
+  eventType       EventType     @relation(fields: [eventTypeId], references: [id])
+  host            User          @relation("HostMeetings", fields: [hostId], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([eventTypeId, startsAt])
+  @@index([hostId, startsAt])
+}
+
+enum MeetingStatus {
+  BOOKED
+  CANCELED
+}
