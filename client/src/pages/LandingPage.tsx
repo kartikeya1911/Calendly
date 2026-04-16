@@ -116,7 +116,7 @@ export function LandingPage() {
 
               <div className="flex flex-col gap-3 mt-8 max-w-[320px]">
                 <a
-                  href="http://localhost:4000/api/auth/google"
+                  href={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:4000"}/api/auth/google`}
                   className="flex items-center gap-3 bg-white border border-gray-200 text-[#0b3558] px-6 py-3 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors no-underline shadow-sm"
                 >
                   <img src="/images/Google__G__Logo.svg" alt="Google" className="w-5 h-5" />

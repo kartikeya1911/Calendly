@@ -4,7 +4,7 @@ const { prisma } = require("../config/database");
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URI =
-  process.env.GOOGLE_REDIRECT_URI || "http://localhost:4000/api/auth/google/callback";
+  process.env.GOOGLE_REDIRECT_URI || "https://calendly-backend-2ehd.onrender.com/api/auth/google/callback";
 
 function makeOAuthClient() {
   return new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);

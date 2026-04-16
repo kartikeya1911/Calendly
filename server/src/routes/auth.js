@@ -51,7 +51,7 @@ router.get("/auth/google/callback", async (req, res) => {
       },
     });
 
-    const redirectUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const redirectUrl = process.env.FRONTEND_URL || "https://calendly-sage.vercel.app";
     return res.redirect(`${redirectUrl}/connect-calendar?connected=true`);
   } catch (error) {
     console.error("Google auth callback error:", error?.message || error);

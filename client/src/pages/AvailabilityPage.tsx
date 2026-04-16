@@ -126,14 +126,14 @@ export function AvailabilityPage() {
                     type="button"
                     onClick={() => toggleDay(dayIndex)}
                     className={`
-                      relative w-10 h-[22px] rounded-full transition-colors duration-200 cursor-pointer border-0
+                      relative flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-opacity-75
                       ${enabled ? "bg-brand" : "bg-gray-200"}
                     `}
                   >
                     <span
                       className={`
-                        absolute top-0.5 w-[18px] h-[18px] rounded-full bg-white shadow-sm transition-transform duration-200
-                        ${enabled ? "translate-x-[20px]" : "translate-x-0.5"}
+                        pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out
+                        ${enabled ? "translate-x-5" : "translate-x-0"}
                       `}
                     />
                   </button>
